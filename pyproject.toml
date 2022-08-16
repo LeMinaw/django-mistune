@@ -27,6 +27,7 @@ classifiers = [
 ]
 dependencies = [
   "django>=3.2",
+  "mistune~=2.0",
 ]
 dynamic = ["version"]
 
@@ -39,6 +40,7 @@ dev = [
 test = [
   "pytest",
   "pytest-cov",
+  "pytest-django",
 ]
 
 [project.urls]
@@ -46,10 +48,10 @@ Documentation = "https://github.com/leminaw/django-mistune#readme"
 Issues = "https://github.com/leminaw/django-mistune/issues"
 Source = "https://github.com/leminaw/django-mistune"
 
-# Hatch
-
 [tool.hatch.version]
 path = "django_mistune/__about__.py"
+
+# Hatch envs
 
 [tool.hatch.envs.dev]
 features = ["dev"]
@@ -78,8 +80,19 @@ matrix.dj.dependencies = [
 ]
 
 [tool.hatch.envs.test.scripts]
-test = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=django_mistune --cov=tests"
+test = "pytest --cov-report=term-missing --cov-report xml --cov-config=pyproject.toml --cov=django_mistune"
 test-no-cov = "cov --no-cov"
+
+[tool.hatch.envs.test.env-vars]
+DJANGO_SETTINGS_MODULE = "tests.settings"
+
+# Formatters 
+
+[tool.black]
+line-length = 80
+
+[tool.isort]
+profile = "black"
 
 # Coverage
 
