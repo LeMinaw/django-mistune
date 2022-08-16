@@ -52,3 +52,18 @@ class AddClasses:
     def __call__(self, md):
         if md.renderer.NAME == "html":
             md.after_render_hooks.append(self.add_classes)
+
+
+class TargetBlankLinks:
+    """Add `target="_blank"` to all document links.
+
+    This only alters the rendering of the document, not its AST.
+    """
+
+    def add_targets(self, md, result, state):
+        """Find bare `<a>` tags and add targets to them."""
+        return result.replace("<a", '<a target="_blank"')
+
+    def __call__(self, md):
+        if md.renderer.NAME == "html":
+            md.after_render_hooks.append(self.add_targets)

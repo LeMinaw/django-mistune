@@ -23,3 +23,9 @@ def test_classes():
         markdown("Hello *World*", "classes"),
         '<p class="a b">Hello <em class="c">World</em></p>',
     )
+
+
+def test_links():
+    target = '<p><a target="_blank" href="example.com">Link</a></p>'
+    assertHTMLEqual(markdown("[Link](example.com)", "links"), target)
+    assertHTMLEqual(markdown("[Link][1]\n\n[1]: example.com", "links"), target)

@@ -1,4 +1,4 @@
-from django_mistune.plugins import HeaderLevels, AddClasses
+from django_mistune.plugins import AddClasses, HeaderLevels, TargetBlankLinks
 
 USE_TZ = True  # Avoid deprecation warning
 
@@ -16,4 +16,5 @@ MISTUNE_STYLES = {
     "noescape": {"escape": False},
     "headers": {"plugins": [HeaderLevels(3)]},
     "classes": {"plugins": [AddClasses({"p": ("a", "b"), "em": "c"})]},
+    "links": {"plugins": [TargetBlankLinks()]},
 }
