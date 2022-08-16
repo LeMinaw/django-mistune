@@ -4,9 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "django-mistune"
-description = """
-Simple yet customizable Django template filter to render Markdown using the
-awesome Mistune package."""
+description = "Render Markdown in Django templates using the Mistune package."
 readme = "README.md"
 requires-python = ">=3.7"
 license = "MIT"
