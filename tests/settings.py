@@ -1,3 +1,5 @@
+from django_mistune.plugins import HeaderLevels, AddClasses
+
 USE_TZ = True  # Avoid deprecation warning
 
 INSTALLED_APPS = [
@@ -11,5 +13,7 @@ TEMPLATES = [
 ]
 
 MISTUNE_STYLES = {
-    "custom": {"escape": False},
+    "noescape": {"escape": False},
+    "headers": {"plugins": [HeaderLevels(3)]},
+    "classes": {"plugins": [AddClasses({"p": ("a", "b"), "em": "c"})]},
 }
