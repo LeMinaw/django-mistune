@@ -19,7 +19,7 @@ class HeaderLevels:
             if tok["type"] == "heading":
                 self.replace_level(tok)
             if "children" in tok.keys():
-                self.find_headings(tok["children"])
+                self.find_headings(md, tok["children"], state)
         return tokens
 
     def __call__(self, md):
