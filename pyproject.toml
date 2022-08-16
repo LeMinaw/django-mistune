@@ -1,0 +1,98 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "django-mistune"
+description = """
+Simple yet customizable Django template filter to render Markdown using the
+awesome Mistune package."""
+readme = "README.md"
+requires-python = ">=3.7"
+license = "MIT"
+keywords = ["django", "template", "filter", "markdown", "commonmark"]
+authors = [
+  { name = "LeMinaw", email = "leminaw@gmail.com" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+  "django>=3.2",
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+dev = [
+  "black",
+  "isort",
+  "flake8",
+]
+test = [
+  "pytest",
+  "pytest-cov",
+]
+
+[project.urls]
+Documentation = "https://github.com/leminaw/django-mistune#readme"
+Issues = "https://github.com/leminaw/django-mistune/issues"
+Source = "https://github.com/leminaw/django-mistune"
+
+# Hatch
+
+[tool.hatch.version]
+path = "django_mistune/__about__.py"
+
+[tool.hatch.envs.dev]
+features = ["dev"]
+
+[tool.hatch.envs.dev.scripts]
+fmt = [
+  "isort .",
+  "black .",
+]
+
+[tool.hatch.envs.test]
+features = ["test"]
+matrix-name-format = "{variable}{value}"
+
+[[tool.hatch.envs.test.matrix]]
+python = ["310"]
+# python = ["37", "38", "39", "310", "311"]
+dj = ["32", "40", "41", "main"]
+
+[tool.hatch.envs.test.overrides]
+matrix.dj.dependencies = [
+  { value = "django~=3.2.0", if = ["32"] },
+  { value = "django~=4.0.0", if = ["40"] },
+  { value = "django~=4.1.0", if = ["41"] },
+  { value = "django @ git+https://github.com/django/django.git", if = ["main"] }
+]
+
+[tool.hatch.envs.test.scripts]
+test = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=django_mistune --cov=tests"
+test-no-cov = "cov --no-cov"
+
+# Coverage
+
+[tool.coverage.run]
+branch = true
+parallel = true
+omit = [
+  "django_mistune/__about__.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
