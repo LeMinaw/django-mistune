@@ -25,6 +25,13 @@ def test_classes():
     )
 
 
+def test_classes_existing_attrs():
+    assertHTMLEqual(
+        markdown("This ![image](test.jpg)", "classes"),
+        '<p class="a b">This <img src="test.jpg" alt="image" class="d"></p>',
+    )
+
+
 def test_links():
     target = '<p><a target="_blank" href="example.com">Link</a></p>'
     assertHTMLEqual(markdown("[Link](example.com)", "links"), target)

@@ -24,6 +24,7 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
+  "defusedxml~=0.7",
   "django>=3.2",
   "mistune~=2.0",
 ]

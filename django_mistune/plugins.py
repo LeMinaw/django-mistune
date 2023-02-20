@@ -1,3 +1,6 @@
+from defusedxml import ElementTree
+
+
 class HeaderLevels:
     def __init__(self, top=3):
         """Demotes all the headers of the document so the first level becomes
@@ -39,15 +42,23 @@ class AddClasses:
 
     def add_classes(self, md, result, state):
         """Find bare HTML tags and add classes to them."""
+        root = ElementTree.fromstring(result)
+
         for tag, classes in self.tags.items():
             if not isinstance(classes, tuple):
                 classes = (classes,)
 
-            result = result.replace(
-                f"<{tag}>", f"<{tag} class=\"{' '.join(classes)}\">"
-            )
+            self._process_tag(root, tag, classes)
 
-        return result
+        return ElementTree.tostring(root, encoding="unicode")
+
+    def _process_tag(self, root, tag, new_classes):
+        """Add `new_classes` to all `tag` elements in `root`."""
+        for el in root.iter(tag):
+            old_classes = el.get("class", "").split(" ")
+            classes = set((*old_classes, *new_classes))
+
+            el.set("class", " ".join(classes))
 
     def __call__(self, md):
         if md.renderer.NAME == "html":
