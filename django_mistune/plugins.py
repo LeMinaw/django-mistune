@@ -1,4 +1,5 @@
 from defusedxml import ElementTree
+from defusedxml.ElementTree import ParseError
 
 
 class HeaderLevels:
@@ -37,12 +38,17 @@ class AddClasses:
         to `p` and `em` tags of the document, and the `b` class to `p` tags.
 
         This only alters the rendering of the document, not its AST.
+
+        If the input HTML cannot be parsed, it will be returned as-is.
         """
         self.tags = tags or {}
 
     def add_classes(self, md, result, state):
         """Find bare HTML tags and add classes to them."""
-        root = ElementTree.fromstring(result)
+        try:
+            root = ElementTree.fromstring(result)
+        except ParseError:
+            return result
 
         for tag, classes in self.tags.items():
             if not isinstance(classes, tuple):
@@ -69,11 +75,16 @@ class TargetBlankLinks:
     """Add `target="_blank"` to all document links.
 
     This only alters the rendering of the document, not its AST.
+
+    If the input HTML cannot be parsed, it will be returned as-is.
     """
 
     def add_targets(self, md, result, state):
         """Find bare `<a>` tags and add targets to them."""
-        root = ElementTree.fromstring(result)
+        try:
+            root = ElementTree.fromstring(result)
+        except ParseError:
+            return result
 
         for el in root.iter("a"):
             el.set("target", "_blank")

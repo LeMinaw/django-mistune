@@ -1,6 +1,14 @@
+from pytest import mark
 from pytest_django.asserts import assertHTMLEqual
 
 from django_mistune.templatetags.mistune import markdown
+
+ALL_STYLES = ("style", ("headers", "classes", "links"))
+
+
+@mark.parametrize(*ALL_STYLES)
+def test_empty_string(style):
+    assertHTMLEqual(markdown("", style), "")
 
 
 def test_header_level():
