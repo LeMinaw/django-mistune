@@ -2,6 +2,7 @@ from pytest import mark
 from pytest_django.asserts import assertHTMLEqual
 
 from django_mistune.templatetags.mistune import markdown
+from django_mistune.plugins import AddClasses
 
 ALL_STYLES = ("style", ("headers", "classes", "links"))
 
@@ -44,6 +45,14 @@ def test_classes_multiple_roots():
     assertHTMLEqual(
         markdown("foo\n\nbar", "classes"),
         '<p class="a b">foo</p><p class="a b">bar</p>',
+    )
+
+
+def test_classes_keep_existing():
+    html = '<p class="a b">...</p>'
+    plugin = AddClasses({"p": ("b", "c")})
+    assertHTMLEqual(
+        plugin.add_classes(None, html, None), '<p class="a b c">...</p>'
     )
 
 
