@@ -73,7 +73,12 @@ class TargetBlankLinks:
 
     def add_targets(self, md, result, state):
         """Find bare `<a>` tags and add targets to them."""
-        return result.replace("<a", '<a target="_blank"')
+        root = ElementTree.fromstring(result)
+
+        for el in root.iter("a"):
+            el.set("target", "_blank")
+
+        return ElementTree.tostring(root, encoding="unicode")
 
     def __call__(self, md):
         if md.renderer.NAME == "html":
