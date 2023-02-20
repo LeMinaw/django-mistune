@@ -1,5 +1,21 @@
+import re
+
 from defusedxml import ElementTree
-from defusedxml.ElementTree import ParseError
+
+
+class HTMLElementTree:
+    @classmethod
+    def fromstring(cls, string, *args, **kwargs):
+        return ElementTree.fromstring(f"<html>{string}</html>", *args, **kwargs)
+
+    @classmethod
+    def tostring(cls, *args, **kwargs):
+        string = ElementTree.tostring(*args, **kwargs)
+        match = re.match(r"<html>\s*(.*)\s*</html>", string, re.S)
+
+        if match:
+            return match.group(1)
+        return ""
 
 
 class HeaderLevels:
@@ -38,17 +54,12 @@ class AddClasses:
         to `p` and `em` tags of the document, and the `b` class to `p` tags.
 
         This only alters the rendering of the document, not its AST.
-
-        If the input HTML cannot be parsed, it will be returned as-is.
         """
         self.tags = tags or {}
 
     def add_classes(self, md, result, state):
         """Find bare HTML tags and add classes to them."""
-        try:
-            root = ElementTree.fromstring(result)
-        except ParseError:
-            return result
+        root = HTMLElementTree.fromstring(result)
 
         for tag, classes in self.tags.items():
             if not isinstance(classes, tuple):
@@ -56,7 +67,7 @@ class AddClasses:
 
             self._process_tag(root, tag, classes)
 
-        return ElementTree.tostring(root, encoding="unicode")
+        return HTMLElementTree.tostring(root, encoding="unicode")
 
     def _process_tag(self, root, tag, new_classes):
         """Add `new_classes` to all `tag` elements in `root`."""
@@ -75,21 +86,16 @@ class TargetBlankLinks:
     """Add `target="_blank"` to all document links.
 
     This only alters the rendering of the document, not its AST.
-
-    If the input HTML cannot be parsed, it will be returned as-is.
     """
 
     def add_targets(self, md, result, state):
         """Find bare `<a>` tags and add targets to them."""
-        try:
-            root = ElementTree.fromstring(result)
-        except ParseError:
-            return result
+        root = HTMLElementTree.fromstring(result)
 
         for el in root.iter("a"):
             el.set("target", "_blank")
 
-        return ElementTree.tostring(root, encoding="unicode")
+        return HTMLElementTree.tostring(root, encoding="unicode")
 
     def __call__(self, md):
         if md.renderer.NAME == "html":

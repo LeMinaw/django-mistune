@@ -40,6 +40,13 @@ def test_classes_existing_attrs():
     )
 
 
+def test_classes_multiple_roots():
+    assertHTMLEqual(
+        markdown("foo\n\nbar", "classes"),
+        '<p class="a b">foo</p><p class="a b">bar</p>',
+    )
+
+
 def test_links():
     target = '<p><a target="_blank" href="example.com">Link</a></p>'
     assertHTMLEqual(markdown("[Link](example.com)", "links"), target)
