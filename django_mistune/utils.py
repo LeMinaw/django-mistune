@@ -4,8 +4,9 @@ from django_mistune.conf import settings
 def get_style(style_name):
     style = settings.MISTUNE_STYLES.get(style_name)
     if style is None:
-        raise ValueError(
+        msg = (
             f"Unknown style {style_name}. "
             f"Avalaible styles: {', '.join(settings.MISTUNE_STYLES)}"
         )
+        raise ValueError(msg)
     return style

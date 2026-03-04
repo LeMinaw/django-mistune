@@ -11,7 +11,7 @@ class HTMLElementTree:
     @classmethod
     def tostring(cls, *args, **kwargs):
         string = ElementTree.tostring(*args, **kwargs)
-        match = re.match(r"<html>\s*(.*)\s*</html>", string, re.S)
+        match = re.match(r"<html>\s*(.*)\s*</html>", string, re.DOTALL)
 
         if match:
             return match.group(1)
@@ -38,7 +38,7 @@ class HeaderLevels:
         for tok in tokens:
             if tok["type"] == "heading":
                 self.replace_level(tok)
-            if "children" in tok.keys():
+            if "children" in tok:
                 self.find_headings(md, tok["children"], state)
         return tokens
 
@@ -73,7 +73,7 @@ class AddClasses:
         """Add `new_classes` to all `tag` elements in `root`."""
         for el in root.iter(tag):
             old_classes = el.get("class", "").split(" ")
-            classes = set((*old_classes, *new_classes))
+            classes = {*old_classes, *new_classes}
 
             el.set("class", " ".join(classes))
 

@@ -1,4 +1,4 @@
-from pytest import raises
+import pytest
 from pytest_django.asserts import assertHTMLEqual
 
 from django_mistune.conf import settings
@@ -12,7 +12,7 @@ def test_read_settings():
 
 
 def test_get_style_unknown():
-    with raises(ValueError):
+    with pytest.raises(ValueError, match="Unknown style"):
         get_style("unknown")
 
 

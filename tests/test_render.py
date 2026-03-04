@@ -1,5 +1,5 @@
+import pytest
 from django.template import Context, Template
-from pytest import fixture
 from pytest_django.asserts import assertHTMLEqual
 
 
@@ -8,7 +8,7 @@ def assert_renders(template, result, **kwargs):
     assertHTMLEqual(template.render(Context(kwargs)), result)
 
 
-@fixture
+@pytest.fixture
 def default_template():
     return Template(
         r"""{% load mistune %}
@@ -16,7 +16,7 @@ def default_template():
     )
 
 
-@fixture
+@pytest.fixture
 def noescape_template():
     return Template(
         r"""{% load mistune %}

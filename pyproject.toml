@@ -89,6 +89,10 @@ matrix.dj.dependencies = [
 [tool.ruff]
 line-length = 80
 
+[tool.ruff.lint.per-file-ignores]
+"django_mistune/plugins.py" = ["ARG002"] # Unused arguments
+"tests/*.py" = ["S101"] # Assert statements
+
 # Coverage
 
 [tool.coverage.run]
