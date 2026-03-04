@@ -69,8 +69,12 @@ template = "test"
 matrix-name-format = "{variable}{value}"
 
 [[tool.hatch.envs.full.matrix]]
+dj = ["4.2", "5.2"]
 python = ["3.10", "3.11", "3.12", "3.13", "3.14"]
-dj = ["4.2", "5.2", "6.0", "main"]
+
+[[tool.hatch.envs.full.matrix]]
+dj = ["6.0"]
+python = ["3.12", "3.13", "3.14"]
 
 [tool.hatch.envs.full.overrides]
 matrix.dj.dependencies = [
