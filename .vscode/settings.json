@@ -1,9 +1,6 @@
 {
-    "python.defaultInterpreterPath": ".venv/django-mistune-zCgq7jzQ/dev/Scripts/python.exe",
-    "python.linting.enabled": true,
-    "python.linting.flake8Enabled": true,
-    "python.formatting.provider": "black",
     "[python]": {
         "editor.formatOnSave": true,
+        "editor.rulers": [80]
     },
 }

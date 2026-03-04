@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "django-mistune"
 description = "Render Markdown in Django templates using the Mistune package."
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.10"
 license = "MIT"
 keywords = ["django", "template", "filter", "markdown", "commonmark"]
 authors = [
@@ -15,27 +15,26 @@ authors = [
 classifiers = [
   "Development Status :: 4 - Beta",
   "Programming Language :: Python",
-  "Programming Language :: Python :: 3.7",
-  "Programming Language :: Python :: 3.8",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
+  "Framework :: Django",
+  "Framework :: Django :: 4.2",
+  "Framework :: Django :: 5.2",
+  "Framework :: Django :: 6",
 ]
 dependencies = [
   "defusedxml~=0.7",
-  "django>=3.2",
+  "django>=4.2",
   "mistune~=2.0",
 ]
 dynamic = ["version"]
 
 [project.optional-dependencies]
-dev = [
-  "black",
-  "isort",
-  "flake8",
-]
 test = [
   "pytest",
   "pytest-cov",
@@ -50,48 +49,41 @@ Source = "https://github.com/leminaw/django-mistune"
 [tool.hatch.version]
 path = "django_mistune/__about__.py"
 
-# Hatch envs
-
-[tool.hatch.envs.dev]
-features = ["dev"]
-
-[tool.hatch.envs.dev.scripts]
-fmt = [
-  "isort .",
-  "black .",
-]
+# Hatch test env
 
 [tool.hatch.envs.test]
 features = ["test"]
-matrix-name-format = "{variable}{value}"
-
-[[tool.hatch.envs.test.matrix]]
-python = ["310"]
-# python = ["37", "38", "39", "310", "311"]
-dj = ["32", "40", "41", "main"]
-
-[tool.hatch.envs.test.overrides]
-matrix.dj.dependencies = [
-  { value = "django~=3.2.0", if = ["32"] },
-  { value = "django~=4.0.0", if = ["40"] },
-  { value = "django~=4.1.0", if = ["41"] },
-  { value = "django @ git+https://github.com/django/django.git", if = ["main"] }
-]
-
-[tool.hatch.envs.test.scripts]
-test = "pytest --cov-report=term-missing --cov-report xml --cov-config=pyproject.toml --cov=django_mistune"
-test-no-cov = "cov --no-cov"
+installer = "uv"
 
 [tool.hatch.envs.test.env-vars]
 DJANGO_SETTINGS_MODULE = "tests.settings"
 
+[tool.hatch.envs.test.scripts]
+cov = "pytest --cov-report=term-missing --cov-report=xml --cov-config=pyproject.toml --cov=django_mistune"
+test = "pytest --no-cov"
+
+# Hatch matrix test env
+
+[tool.hatch.envs.full]
+template = "test"
+matrix-name-format = "{variable}{value}"
+
+[[tool.hatch.envs.full.matrix]]
+python = ["3.10", "3.11", "3.12", "3.13", "3.14"]
+dj = ["4.2", "5.2", "6.0", "main"]
+
+[tool.hatch.envs.full.overrides]
+matrix.dj.dependencies = [
+  { value = "django~=4.2.0", if = ["4.2"] },
+  { value = "django~=5.2.0", if = ["5.2"] },
+  { value = "django~=6.0.0", if = ["6.0"] },
+  { value = "django @ git+https://github.com/django/django.git", if = ["main"] }
+]
+
 # Formatters 
 
-[tool.black]
+[tool.ruff]
 line-length = 80
-
-[tool.isort]
-profile = "black"
 
 # Coverage
 
